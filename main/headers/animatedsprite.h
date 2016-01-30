@@ -22,17 +22,15 @@ public:
   void update(int elapsedTime);
 
   void draw(Graphics &graphics, int x, int y);
-
-  /*  Sets up all animations for sprite */
-  virtual void setupAnimations();
 protected:
-  bool _currentAnimationOnce;
   double _timeToUpdate;
   std::string _currentAnimation;
+  bool _currentAnimationOnce;
 
   /*  Adds animation to animations map */
   void addAnimation(int frames, int x, int y, std::string name,
     int width, int height, Vector2 offset);
+
 
   /*  Clear animations map  */
   void resetAnimations();
@@ -42,15 +40,18 @@ protected:
 
   /*  Visibility of sprite  */
   void setVisible(bool visible);
+
+  /*  Sets up all animations for sprite */
+  virtual void setupAnimations()=0;
   
   /*  Run after animation ends  */
-  virtual void animationDone(std::string currentAnimation);
-private:
-  bool _visible;
-  int _frameIndex;
-  double _timeElapsed;
+  virtual void animationDone(std::string currentAnimation)=0;
 
+private:
+  double _timeElapsed;
   std::map<std::string, std::vector<SDL_Rect> > _animations;
   std::map<std::string, Vector2> _offsets;
+  int _frameIndex;
+  bool _visible;
 };
 #endif

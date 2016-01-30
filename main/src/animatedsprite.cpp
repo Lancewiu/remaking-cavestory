@@ -9,15 +9,14 @@ AnimatedSprite::AnimatedSprite(Graphics &graphics,
   int width, int height, float posX, float posY, float timeToUpdate):
     Sprite(graphics, filePath, sourceX, sourceY, width, height, 
       posX, posY),
-    _frameIndex(0),_timeToUpdate(timeToUpdate),_visible(true),
-    _currentAnimationOnce(false),_currentAnimation(""){}
-
+    _timeToUpdate(timeToUpdate),_currentAnimation(""),
+    _currentAnimationOnce(false),_frameIndex(0),_visible(true){}
 
 void AnimatedSprite::addAnimation(int frames, int x, int y, 
   std::string name, int width, int height, Vector2 offset){
     std::vector<SDL_Rect> rectangles;
     for(int i=0; i<frames;i++){
-      SDL_Rect newRect = {(i+x)*width, y, width, height};
+      SDL_Rect newRect = {(i + x) * width, y, width, height};
       rectangles.push_back(newRect);
     }
     this->_animations.insert(
@@ -58,7 +57,7 @@ void AnimatedSprite::update(int elapsedTime){
   if(this->_timeElapsed > this->_timeToUpdate){
     this->_timeElapsed -= this->_timeToUpdate;
     if(this->_frameIndex < 
-        this->_animations[this->_currentAnimation].size() - 1){
+        (int)(this->_animations[this->_currentAnimation].size() - 1)){
       this->_frameIndex++;
     }else{
       if(this->_currentAnimationOnce){
@@ -87,12 +86,4 @@ void AnimatedSprite::draw(Graphics &graphics, int x, int y){
     graphics.blitSurface(this->_spriteSheet, &sourceRect, 
       &destinationRectangle);
   }
-}
-
-
-void AnimatedSprite::animationDone(std::string currentAnimation){}
-
-void AnimatedSprite::setupAnimations(){
-  this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2(0,0));
-  this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2(0,0));
 }

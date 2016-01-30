@@ -10,8 +10,5 @@ INC=../headers
 .PHONY: all
 all: main
 
-.PHONY: debug
-debug: main_debug
-
 main: $(SRC)
 	$(CC) $(CFLAGS) $(SDL2_CFLAGS) -I$(INC) -o $@ $^ $(SDL2_LDFLAGS)

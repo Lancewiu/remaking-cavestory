@@ -22,30 +22,60 @@ void Game::gameLoop(){
   Input input;
   SDL_Event event;
 
-  this->_player = AnimatedSprite(graphics, 
-    "content/sprites/MyChar.png",0,0,16,16,100,100,100);
-  this->_player.setupAnimations();
-  this->_player.playAnimation("RunRight");
+  this->_player = Player(graphics,100,100);
 
-  unsigned int LAST_UPDATE_TIME = SDL_GetTicks();
+  unsigned int LAST_UPDATE_TIME = SDL_GetTicks(); 
   //init game loop
   while(true){
     //keyboard shenanigans
     input.beginNewFrame();
+
+    //temporary state of most recent direction pressed.
+    SDL_Scancode mostRecentDirection = SDL_SCANCODE_UNKNOWN;
 
     if(SDL_PollEvent(&event)){
       if(event.type == SDL_KEYDOWN){
         if(event.key.repeat == 0){
           input.keyDownEvent(event);
         }
-      } else if(event.type == SDL_KEYUP){
-        input.keyUpEvent(event);
-      } else if(event.type == SDL_QUIT){
+      }else if(event.type == SDL_KEYUP){
+        input.keyUpEvent(event); 
+      }else if(event.type == SDL_QUIT){
         return;
       }
 
+      /*  Keyboard events  
+          Modified from original tutorial to remove key bias
+          (where holding left key negates checking for right key)*/
       if(input.wasKeyPressed(SDL_SCANCODE_ESCAPE)){
         return;
+      }
+
+      if(input.wasKeyPressed(SDL_SCANCODE_LEFT)){
+        mostRecentDirection = SDL_SCANCODE_LEFT;
+      }
+      if(input.wasKeyPressed(SDL_SCANCODE_RIGHT)){
+        mostRecentDirection = SDL_SCANCODE_RIGHT;
+      }
+
+      if(input.isKeyHeld(SDL_SCANCODE_LEFT) && 
+          input.isKeyHeld(SDL_SCANCODE_RIGHT)){
+        if(mostRecentDirection == SDL_SCANCODE_LEFT){
+          this->_player.moveLeft();
+        }else if(mostRecentDirection == SDL_SCANCODE_RIGHT){
+          this->_player.moveRight();
+        }
+      }else if(!(input.isKeyHeld(SDL_SCANCODE_LEFT) || 
+          input.isKeyHeld(SDL_SCANCODE_RIGHT))){
+        this->_player.stopMoving();
+        mostRecentDirection = SDL_SCANCODE_UNKNOWN;
+      }else{
+        if(input.isKeyHeld(SDL_SCANCODE_LEFT)){
+          this->_player.moveLeft();
+        }
+        if(input.isKeyHeld(SDL_SCANCODE_RIGHT)){
+          this->_player.moveRight();
+        }
       }
     }
 
@@ -62,7 +92,7 @@ void Game::gameLoop(){
 
 void Game::draw(Graphics &graphics){
   graphics.clear();
-  this->_player.draw(graphics,100,100);
+  this->_player.draw(graphics);
   graphics.flip();
 }
 
