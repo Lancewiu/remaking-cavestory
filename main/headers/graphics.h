@@ -1,11 +1,9 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include <SDL2/SDL.h>
 #include <map>
 #include <string>
-
-struct SDL_Window;
-struct SDL_Renderer;
 
 /* Holds all information dealing with graphics in our game */
 class Graphics {

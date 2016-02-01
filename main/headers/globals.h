@@ -15,9 +15,6 @@ struct Vector2{
     x(0),y(0){}
   Vector2(int nx, int ny):
     x(nx),y(ny){}
-  Vector2 zero(){
-    return Vector2(0,0);
-  }
 };
 
 #endif
