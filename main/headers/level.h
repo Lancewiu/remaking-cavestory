@@ -15,9 +15,9 @@ public:
   void update(int elapsedTime);
   void draw(Graphics &graphics);
 private:
-  std::string _mapName;
   Vector2 _spawnPoint;
   Vector2 _size;
+  std::string _mapName;
   SDL_Texture* _backgroundTexture;
   
   void loadMap(std::string mapName, Graphics &graphics);
